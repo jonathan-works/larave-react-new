@@ -30,5 +30,5 @@ yarn
 
 * Criar client que ira consulmir a api
 ```
-php artisan passport: client --personal
+php artisan passport:client --personal
 ```
