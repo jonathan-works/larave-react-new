@@ -1,6 +1,6 @@
 <header class="main-header">
     <!-- Logo -->
-    <a href="{{route('cms.home.index')}}" class="logo">
+    <a href="" class="logo">
         <span class="logo-mini"><b>Foto</b>já</span>
         <span class="logo-lg"><b>Foto já</b></span>
     </a>

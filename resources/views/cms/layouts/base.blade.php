@@ -11,6 +11,7 @@
 <body class="@yield('body.class')">
     @yield('body')
 
+    <script src="{{ asset('react/main.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>

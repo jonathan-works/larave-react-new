@@ -4,9 +4,11 @@
 
 @section('body')
     <div id="app" class="wrapper">
-    @include('cms.layouts.partials.header')
+    {{--@include('cms.layouts.partials.header')--}}
 
-    @include('cms.layouts.partials.sidebar')
+    {{--@include('cms.layouts.partials.sidebar')--}}
+
+        <div id="root"></div>
 
         <div class="content-wrapper">
             <section class="content">

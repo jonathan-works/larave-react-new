@@ -5,7 +5,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li>
-                <a href="{{route('cms.dashboard.index')}}">
+                <a href="">
                     <i class="fa fa-star" aria-hidden="true"></i> <span>Dashboard</span>
                 </a>
             </li>

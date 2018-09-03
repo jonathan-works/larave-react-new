@@ -1,5 +1,10 @@
 <?php
-//
+
+Route::prefix('cms')->namespace('Cms')->group(function (){
+    Route::get('/', 'HomeController@index')->name('home.index');
+});
+
+
 ////Customer
 //Route::get('login', 'Api\Auth\Customer\LoginCustomerApiController@showLoginForm')->name('login');
 //Route::post('login', 'Api\Auth\Customer\LoginCustomerApiController@login');
