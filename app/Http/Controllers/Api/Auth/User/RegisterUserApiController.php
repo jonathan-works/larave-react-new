@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RegisterUserApiController extends Controller
 {
@@ -37,7 +38,16 @@ class RegisterUserApiController extends Controller
      *
      * @var string
      */
-    protected $guard = 'cms-api';
+    protected $guard = 'api';
+
+    /**
+     * RegisterUserApiController constructor.
+     * @param string $guard
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['register']]);
+    }
 
 
     /**
@@ -60,13 +70,31 @@ class RegisterUserApiController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->name;
+        $user = new User();
+        $user->email = $request->email;
+        $user->name = $request->name;
+        $user->password = bcrypt($request->password);
+        $user->save();
 
-        return response()->json(['success'=>$success]);
+        //Login
+        $credentials = $request->only('email', 'password');
+//        $success['token'] =  auth($this->guard)->attempt($credentials);
+//        $success['name'] =  $user->name;
+//
+//        return response()->json(['success'=>$success]);
+
+        $token = auth($this->guard)->attempt($credentials);
+
+        return $this->respondWithToken($token);
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ],200);
     }
 
     protected function guard()

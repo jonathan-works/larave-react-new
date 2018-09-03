@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'api',
         'passwords' => 'users',
     ],
 
@@ -41,29 +41,40 @@ return [
             'provider' => 'users',
         ],
 
-        'cms' => [
-            'driver' => 'passport',
+        'api' => [
+            'driver' => 'jwt',
             'provider' => 'users',
-            'passwords' => 'users'
         ],
 
-        'customer' => [
-            'driver' => 'passport',
+        'api-cms' => [
+            'driver' => 'jwt',
             'provider' => 'customers',
-            'passwords' => 'customers'
         ],
 
-        'cms-api' => [
-            'driver' => 'session',
-            'provider' => 'users',
-            'passwords' => 'users'
-        ],
 
-        'customer-api' => [
-            'driver' => 'session',
-            'provider' => 'customers',
-            'passwords' => 'customers'
-        ]
+//        'cms' => [
+//            'driver' => 'passport',
+//            'provider' => 'users',
+//            'passwords' => 'users'
+//        ],
+//
+//        'customer' => [
+//            'driver' => 'passport',
+//            'provider' => 'customers',
+//            'passwords' => 'customers'
+//        ],
+//
+//        'cms-api' => [
+//            'driver' => 'session',
+//            'provider' => 'users',
+//            'passwords' => 'users'
+//        ],
+//
+//        'customer-api' => [
+//            'driver' => 'session',
+//            'provider' => 'customers',
+//            'passwords' => 'customers'
+//        ]
     ],
 
     /*
@@ -84,6 +95,7 @@ return [
     */
 
     'providers' => [
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Domain\User::class,

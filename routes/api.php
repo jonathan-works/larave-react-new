@@ -16,6 +16,8 @@ Route::prefix('auth')->group(function (){
     //User
     Route::prefix('user')->namespace('Api\Auth\User')->group(function (){
         Route::post('/', 'LoginUserApiController@login');
+        Route::post('logout', 'LoginUserApiController@logout');
+        Route::post('refresh', 'LoginUserApiController@refresh');
         Route::post('register', 'RegisterUserApiController@register');
         Route::post('password-recovery', 'ForgotPasswordUserApiController@sendResetLinkEmail');
         Route::post('password-reset', 'ResetPasswordUserApiController@reset');
@@ -23,7 +25,7 @@ Route::prefix('auth')->group(function (){
 
 });
 
-Route::middleware('auth:customer')->group( function() {
+Route::middleware('auth:api-cms')->group( function() {
 
     //Customer
     Route::prefix('customer')->namespace('Api\Auth\Customer')->group(function (){
@@ -32,7 +34,7 @@ Route::middleware('auth:customer')->group( function() {
 
 });
 
-Route::middleware('auth:cms')->group( function() {
+Route::middleware('auth:api')->group( function() {
 
     //User
     Route::prefix('user')->namespace('Api\Auth\User')->group(function (){

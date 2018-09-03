@@ -20,22 +20,42 @@ class LoginCustomerApiController extends Controller
 
     use AuthenticatesUsers;
 
-    protected $guard = 'customer-api';
+    protected $guard = 'api-cms';
 
     public function login(Request $request)
     {
 
-        if ($this->guard($this->guard)->attempt(['email' => $request->email, 'password' => $request->password])) {
+        $this->validateLogin($request);
 
-            $user = $this->guard($this->guard)->user();
+        $credentials = $request->only('email', 'password');
 
-            $success['token'] = $user->createToken('MyApp')->accessToken;
-
-            return response()->json(['success' => $success], 200);
+        if($token = auth($this->guard)->attempt($credentials)){
+            return $this->respondWithToken($token);
         }
 
         return response()->json(['error' => 'Unauthorised'], 401);
 
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+
+        return response()->json(['success' => 'Successfully logged out'],200);
+    }
+
+    public function refresh()
+    {
+        return $this->respondWithToken(auth()->refresh());
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ],200);
     }
 
     protected function guard()

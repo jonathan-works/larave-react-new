@@ -32,7 +32,7 @@ class ResetPasswordCustomerApiController extends Controller
     use ResetsPasswords;
 
 
-    protected $guard = 'customer-api';
+    protected $guard = 'api-cms';
 
     protected function rules()
     {
@@ -46,9 +46,7 @@ class ResetPasswordCustomerApiController extends Controller
 
     public function reset(Request $request)
     {
-        //return 'teste';
         $this->validate($request, $this->rules(), $this->validationErrorMessages());
-
             $response = $this->broker()->reset(
                 $this->credentials($request), function ($user, $password) {
                 $this->resetPassword($user, $password);

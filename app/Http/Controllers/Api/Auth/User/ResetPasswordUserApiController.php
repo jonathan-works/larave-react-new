@@ -31,7 +31,7 @@ class ResetPasswordUserApiController extends Controller
     use ResetsPasswords;
 
 
-    protected $guard = 'cms-api';
+    protected $guard = 'api';
 
     /**
      * Where to redirect users after resetting their password.

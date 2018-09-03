@@ -40,7 +40,7 @@ class RegisterCustomerApiController extends Controller
      * @var string
      */
 
-    protected $guard = 'customer-api';
+    protected $guard = 'api-cms';
 
 
     /**
@@ -63,13 +63,31 @@ class RegisterCustomerApiController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $customer = Customer::create($input);
-        $success['token'] =  $customer->createToken('MyApp')->accessToken;
-        $success['name'] =  $customer->name;
+        $customer = new Customer();
+        $customer->email = $request->email;
+        $customer->name = $request->name;
+        $customer->password = bcrypt($request->password);
+        $customer->save();
 
-        return response()->json(['success'=>$success]);
+        //Login
+        $credentials = $request->only('email', 'password');
+//        $success['token'] =  auth($this->guard)->attempt($credentials);
+//        $success['name'] =  $user->name;
+//
+//        return response()->json(['success'=>$success]);
+
+        $token = auth($this->guard)->attempt($credentials);
+
+        return $this->respondWithToken($token);
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ],200);
     }
 
     protected function guard()
