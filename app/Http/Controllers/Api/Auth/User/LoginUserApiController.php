@@ -34,7 +34,8 @@ class LoginUserApiController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'isLogged']]);
+//        $this->middleware('jwt.logged');
     }
 
 
@@ -53,14 +54,24 @@ class LoginUserApiController extends Controller
 
     public function logout()
     {
-        auth()->logout();
+        auth($this->guard)->logout(true);
 
         return response()->json(['success' => 'Successfully logged out'],200);
     }
 
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth($this->guard)->refresh());
+    }
+
+    public function isLogged()
+    {
+        try {
+            auth()->userOrFail();
+            return response()->json(['success' => 'Is Logged!'],200);
+        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Is not logged in'], 401);
+        }
     }
 
     protected function respondWithToken($token)
@@ -68,7 +79,7 @@ class LoginUserApiController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth($this->guard)->factory()->getTTL() * 60
         ],200);
     }
 
